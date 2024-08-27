@@ -42,12 +42,33 @@ variable "public_subnet_cidrs" {
       error_message = "pls provide only 2 valid public subnet cidr"
   } 
 }
+variable "private_subnet_cidrs" {
+  type = list
+  validation {
+      condition = length(var.private_subnet_cidrs) == 2
+      error_message = "pls provide only 2 valid public subnet cidr"
+  } 
+}
+variable "database_subnet_cidrs" {
+  type = list
+  validation {
+      condition = length(var.database_subnet_cidrs) == 2
+      error_message = "pls provide only 2 valid public subnet cidr"
+  } 
+}
 
 variable "public_subnet_cidr_tags" {
     type=map 
     default = {}
 }
-
+variable "private_subnet_cidr_tags" {
+    type=map 
+    default = {}
+}
+variable "database_subnet_cidr_tags" {
+    type=map 
+    default = {}
+}
 
 variable "nat_gateway_tags" {
   type = map

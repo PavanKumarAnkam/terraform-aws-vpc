@@ -108,7 +108,7 @@ resource "aws_nat_gateway" "nat" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
-  # route {/       # this block is for route we will add later , now we'll create route tables only
+  # route {      # this block is for route we will add later , now we'll create route tables only
   #   cidr_block = "10.0.1.0/24"
   #   gateway_id = aws_internet_gateway.gw.id
   # }
@@ -168,3 +168,31 @@ resource "aws_route" "database_route_nat" {
   destination_cidr_block    = "0.0.0.0/0"  # destination in aws console
   nat_gateway_id = aws_nat_gateway.nat.id  # target in aws console
 }
+
+# resource "aws_route_table_association" "a" {
+#   subnet_id      = aws_subnet.foo.id
+#   route_table_id = aws_route_table.bar.id
+# }
+# resource "aws_route_table_association" "b" {
+#   gateway_id     = aws_internet_gateway.foo.id
+#   route_table_id = aws_route_table.bar.id
+# }
+
+resource "aws_route_table_association" "public" {
+    count = length(var.public_subnet_cidrs)  # here * refers to all(2) subnets and we use count for that
+    subnet_id      = element(aws_subnet.public[*].id,count.index) # aws_subnet.database[*].id gives--> list && element(list, index)gives particular value at index
+    route_table_id = aws_route_table.public.id
+ }
+
+resource "aws_route_table_association" "private" {
+    count = length(var.private_subnet_cidrs)  # here * refers to all(2) subnets and we use count for that
+    subnet_id      = element(aws_subnet.private[*].id,count.index) # aws_subnet.database[*].id gives--> list && element(list, index)gives particular value at index
+    route_table_id = aws_route_table.private.id
+ }
+
+resource "aws_route_table_association" "database" {
+    count = length(var.private_subnet_cidrs)   # here * refers to all(2) subnets and we use count for that
+    subnet_id      =element(aws_subnet.database[*].id,count.index)  # aws_subnet.database[*].id gives--> list && element(list, index)gives particular value at index
+    route_table_id = aws_route_table.database.id
+ }
+
