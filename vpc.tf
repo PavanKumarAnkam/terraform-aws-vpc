@@ -126,7 +126,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
       var.common_tags,
-      var.private_route_table_tags,
+      var.private_route_table_tags, 
     {
       Name="${local.resource_name}"
     }
