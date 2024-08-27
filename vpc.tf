@@ -144,3 +144,27 @@ resource "aws_route_table" "database" {
     }
   )
 }
+
+
+### aws route ###
+# resource "aws_route" "r" {
+#   route_table_id            = aws_route_table.testing.id
+#   destination_cidr_block    = "10.0.1.0/22"
+#   vpc_peering_connection_id = "pcx-45ff3dc1"
+# }
+
+resource "aws_route" "public_route" {
+  route_table_id            = aws_route_table.public.id
+  destination_cidr_block    = "0.0.0.0/0"  # destination in aws console
+  nat_gateway_id = aws_internet_gateway.gw.id  # target in aws console
+}
+resource "aws_route" "private_route_nat" {
+  route_table_id            = aws_route_table.private.id
+  destination_cidr_block    = "0.0.0.0/0"  # destination in aws console
+  nat_gateway_id = aws_nat_gateway.nat.id  # target in aws console
+}
+resource "aws_route" "database_route_nat" {
+  route_table_id            = aws_route_table.database.id
+  destination_cidr_block    = "0.0.0.0/0"  # destination in aws console
+  nat_gateway_id = aws_nat_gateway.nat.id  # target in aws console
+}
