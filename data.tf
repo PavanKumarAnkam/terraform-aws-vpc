@@ -1,6 +1,3 @@
-# data "aws_availability_zone" "zones" {
-#   name = "us-east-1"
-# }
 
 data "aws_availability_zones" "available" {
   state = "available"
@@ -8,4 +5,13 @@ data "aws_availability_zones" "available" {
 
 data "aws_vpc" "default" {
   default = true
+}
+
+#from git
+data "aws_route_table" "main" {
+  vpc_id = data.aws_vpc.default.id
+  filter {
+    name = "association.main"
+    values = ["true"]
+  }
 }
