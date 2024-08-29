@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "gw" {
 
   tags = merge(
     var.common_tags,
-    var.igw_tags,
+    var.gw_tags,
     {
       Name=local.resource_name
     }
