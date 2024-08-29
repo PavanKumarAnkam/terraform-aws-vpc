@@ -201,7 +201,7 @@ resource "aws_route_table" "database" {
 resource "aws_route" "public_route" {
   route_table_id            = aws_route_table.public.id
   destination_cidr_block    = "0.0.0.0/0"  # destination in aws console
-  nat_gateway_id = aws_internet_gateway.gw.id  # target in aws console
+  gateway_id = aws_internet_gateway.gw.id  # target in aws console
 }
 resource "aws_route" "private_route_nat" {
   route_table_id            = aws_route_table.private.id
