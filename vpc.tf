@@ -48,6 +48,38 @@ resource "aws_subnet" "public" {
   )
 }
 
+## Private Subnet
+resource "aws_subnet" "private" { # first name is public[0], second name is public[1]
+  count = length(var.private_subnet_cidrs)
+  availability_zone = local.az_names[count.index]
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.private_subnet_cidrs[count.index]
+
+  tags = merge(
+    var.common_tags,
+    var.private_subnet_cidr_tags,
+    {
+        Name = "${local.resource_name}-private-${local.az_names[count.index]}"
+    }
+  )
+}
+
+## Database Subnet
+resource "aws_subnet" "database" { # first name is public[0], second name is public[1]
+  count = length(var.database_subnet_cidrs)
+  availability_zone = local.az_names[count.index]
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.database_subnet_cidrs[count.index]
+
+  tags = merge(
+    var.common_tags,
+    var.database_subnet_cidr_tags,
+    {
+        Name = "${local.resource_name}-database-${local.az_names[count.index]}"
+    }
+  )
+}
+
 # resource "aws_eip" "lb" {
 #   instance = aws_instance.web.id
 #   domain   = "vpc"
